@@ -1,4 +1,25 @@
 (function (global) {
+  // polyfill for CustomEvent
+  (!this.CustomEvent || typeof this.CustomEvent === "object") && (function() {
+    // CustomEvent for browsers which don't natively support the Constructor method
+    this.CustomEvent = function CustomEvent(type, eventInitDict) {
+      var event;
+      eventInitDict = eventInitDict || {bubbles: false, cancelable: false, detail: undefined};
+
+      try {
+        event = document.createEvent('CustomEvent');
+        event.initCustomEvent(type, eventInitDict.bubbles, eventInitDict.cancelable, eventInitDict.detail);
+      } catch (error) {
+        // for browsers which don't support CustomEvent at all, we use a regular event instead
+        event = document.createEvent('Event');
+        event.initEvent(type, eventInitDict.bubbles, eventInitDict.cancelable);
+        event.detail = eventInitDict.detail;
+      }
+
+      return event;
+    };
+  })();
+
   /**
    * Type Parsers
    */
@@ -199,6 +220,28 @@
     return obj;
   };
 
+  var fireEvent = function (form, xhr, type, data) {
+    var formevent;
+    var handler = form['on' + type]; // save current handler
+    var detail = {
+      textStatus: xhr.statusText,
+      xhr: xhr
+    };
+
+    if (data) {
+      detail.data = data;
+    }
+
+    formevent = new CustomEvent(type, {
+      bubbles: true,
+      detail: detail
+    });
+
+    // set to null to void trigger handler twice.
+    form['on' + type] = null;
+    form.dispatchEvent(formevent);
+    form['on' + type] = handler;
+  };
 
   /**
    * handler for form submit event.
@@ -217,7 +260,8 @@
 
     // request data for AJAX
     var requestdata = {};
-    var xmlHttp = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
+    var isAJAXSupportJson = true;
 
     // If request is running, just return before complete ajax.
     if (form.isrunning) {
@@ -278,68 +322,67 @@
       action += action.indexOf('?') === -1 ? ('?' + requestdata) : ('&' + requestdata);
     }
 
-    xmlHttp.open(method, action, true);
-    xmlHttp.setRequestHeader('Content-Type', 'application/json');
-
-    function fireEvent(type, data) {
-      var formevent;
-      var detail = {
-        textStatus: xmlHttp.statusText,
-        xhr: xmlHttp
-      };
-
-      if (data) {
-        detail.data = data;
-      }
-
-      formevent = new CustomEvent(type, {
-        bubbles: true,
-        detail: detail
-      });
-      form.dispatchEvent(formevent);
+    xhr.open(method, action, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    try {
+      xhr.responseType = 'json';
+    } catch (e) {
+      isAJAXSupportJson = false;
     }
 
-    xmlHttp.onreadystatechange = function () {
-      if (xmlHttp.readyState === 4) {
+
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
         form.isrunning = false;
+        var data = xhr.response;
+
+        // If browser not support json as responseType
+        if (!isAJAXSupportJson || typeof xhr.response === 'string') {
+          try {
+            data = JSON.parse(xhr.response);
+          } catch (e) {
+            data = null;
+          }
+        }
 
         // SUCCESS
-        if (xmlHttp.status >= 200 && xmlHttp.status < 300) {
+        if (xhr.status >= 200 && xhr.status < 300) {
           // call onsuccess
           if (form.onsuccess) {
-            form.onsuccess(xmlHttp.response, xmlHttp.statusText, xmlHttp);
+            form.onsuccess(data, xhr.statusText, xhr);
           }
           // Dispatch success event
-          fireEvent('success', xmlHttp.response);
+          fireEvent(form, xhr, 'success', data);
 
         // ERROR
         } else {
           // call onerror
           if (form.onerror) {
-            form.onerror(xmlHttp, xmlHttp.statusText);
+            form.onerror(xhr, xhr.statusText);
           }
           // Dispatch error event
-          fireEvent('error');
+          fireEvent(form, xhr, 'error', data);
         }
 
         // COMPLETE
         if (form.oncomplete) {
-          form.oncomplete(xmlHttp, xmlHttp.statusText);
+          form.oncomplete(xhr, xhr.statusText);
         }
         // Dispatch complete event
-        fireEvent('complete');
+        fireEvent(form, xhr, 'complete', data);
       }
     };
 
     // set isrunning flag to true
     form.isrunning = true;
 
-    if (form.beforeSend) form.beforeSend(xmlHttp);
+    if (form.beforeSend) form.beforeSend(xhr);
 
     if (method === 'GET') {
-      xmlHttp.send();
+      xhr.send();
     } else {
-      xmlHttp.send(requestdata);
+      xhr.send(requestdata);
     }
   };
 
@@ -365,13 +408,15 @@
   var _nativeSubmit = HTMLFormElement.prototype.submit;
   HTMLFormElement.prototype.submit = function () {
     if (this.getAttribute('enctype') === 'application/form-json') {
-      submitHandler.call(this);
+      var e = new CustomEvent('submit', {bubbles: true});
+      this.dispatchEvent(e);
     } else {
       _nativeSubmit.apply(this, arguments);
     }
   };
-
-  global.registerType = function (type, parser) {
+  
+  global.HTMLFormJSONElement = global.HTMLFormJSONElement || {};
+  global.HTMLFormJSONElement.registerType = function (type, parser) {
     typeParsers[type] = parser;
   };
 }(window));
