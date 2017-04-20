@@ -6,7 +6,7 @@
     <script src='../src/form-json.js'></script>
   </head>
   <body>
-    <form action='./server.json' enctype="application/form-json" method="post">
+    <form action='https://api.github.com/gists/7796dfa3e275707f23a16ac9ceb9ce15' enctype="application/form-json">
       <input name='a' value='b' />
       <input type='submit' />
     </form>
@@ -15,7 +15,7 @@
       var form = document.querySelector('form');
 
       form.beforeSend = function (xhr) {
-        xhr.setRequestHeader('Access-Token', 'ABC');
+        xhr.setRequestHeader('X-Requested-With', 'form-json');
       }
 
       form.beforeStringify = function (data) {
@@ -30,8 +30,18 @@
        * }
        */
       form.onsuccess = function (data) {
-        console.log('response:' + JSON.stringify(data));
+        console.log('response success: ', data);
       }
+
+      form.onerror = function (xhr) {
+        console.log('response error: ', xhr.response)
+      }
+
+      document.body.addEventListener('sumit', function () {
+        this.beforeStringify = function (d) {
+          document.querySelector('textarea').value = JSON.stringify(null, 2, d);
+        }
+      })
     </script>
   </body>
 </html>

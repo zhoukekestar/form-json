@@ -12,6 +12,7 @@ Import `form-json.js`, and set your form enctype to `application/form-json`. Tha
 ```
 
 # Input Syntax
+[Try it Online!](https://zhoukekestar.github.io/form-json/public/input-syntax.html)
 
 | syntax | input | output |
 | -- | -- | -- |
@@ -21,6 +22,8 @@ Import `form-json.js`, and set your form enctype to `application/form-json`. Tha
 | `a.NUMBER.b` | `<input name="a.1.a" value="a1a" />` <br> `<input name="a.6.a" value="a6a" />` <br> `<input name="a.6.b" value="a6b" />` | { a: [<br>&nbsp;&nbsp;{a: "a1a"},<br>&nbsp;&nbsp;{a: "a6a", b: "a6b"}<br>]} |
 
 # Type Syntax
+[Try it Online!](https://zhoukekestar.github.io/form-json/public/type-syntax.html)
+
 | syntax | input | output |
 | -- | -- | -- |
 | `:string` | `<input name="a" value="b" />` | { a: "b" } |
@@ -41,9 +44,6 @@ You can register a custom type parser to FormJSON for your data. Example:
   HTMLFormJSONElement.registerType('ISOString', function (value) {
     return new Date(value).toISOString();
   })
-  // We will post
-  // { "date": "2017-03-30T23:00:00.000Z" }
-  // to server after submitting form.
 </script>
 ```
 
@@ -88,71 +88,11 @@ Example, [Try it online](https://zhoukekestar.github.io/form-json/public/methods
 # Form Attributes
 * [Try it online!](https://zhoukekestar.github.io/form-json/public/attributes.html)
 * `number2array="true|false"`, default: true.
-
-  ```html
-  // number2array is true
-  <form enctype='application/form-json'>
-    <input name='a.2.b' value="a2b">
-  </form>
-  // output
-  {
-    a: [
-      {
-        b: 'a2b'
-      }
-    ]
-  }
-
-  // number2array is false
-  <form enctype='application/form-json' number2array='false'>
-    <input name='a.2.b' value="a2b">
-  </form>
-  // output
-  {
-    a: {
-      2: {
-        b: 'a2b'
-      }
-    }
-  }
-  ```
 * `orderby="number|element"`, default: `number`. Attention: `number2array` must be `true`, otherwise it doesn't work.
 
-  ```html
-  // orderby number
-  <form enctype='application/form-json'>
-    <input name='a.3.b' value="a3b">
-    <input name='a.2.b' value="a2b">
-  </form>
-  // output
-  {
-    a: [
-      {
-        b: 'a2b'
-      },
-      {
-        b: 'a3b'
-      }
-    ]
-  }
 
-  // orderby element
-  <form enctype='application/form-json' orderby='element'>
-    <input name='a.3.b' value="a3b">
-    <input name='a.2.b' value="a2b">
-  </form>
-  // output
-  {
-    a: [
-      {
-        b: 'a3b'
-      },
-      {
-        b: 'a2b'
-      }
-    ]
-  }
-  ```
+# Browser Support
+`form-json.js` is support most browser include `IE10+` as [`XMLHttpRequest`](http://caniuse.com/#feat=xhr2) is required.
 
 
 # FQA

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Attributes Demo</title>
+    <title>Input-Syntax Demo</title>
     <script src='../src/form-json.js'></script>
     <style media="screen">
       textarea {
@@ -18,44 +18,43 @@
   <body>
     <h2>AJAX data:</h2>
     <textarea>empty</textarea>
-    <h3>number2array is true</h3>
+    <h3>a</h3>
     <form enctype="application/form-json">
       <label>
-        a.2.b
-        <input name='a.2.b' value="a.2.b">
+        a
+        <input name='a' value="a">
       </label>
       <input type='submit' />
     </form>
-    <h3>number2array is false</h3>
-    <form enctype="application/form-json" number2array='false'>
+    <h3>a.</h3>
+    <form enctype="application/form-json">
       <label>
-        a.2.b
-        <input name='a.2.b' value="a.2.b">
+        a.
+        <input name='a.' value="a.">
       </label>
       <input type='submit' />
     </form>
-    <br>
-    <h3>orderby is number</h3>
-    <form enctype='application/form-json'>
+    <h3>a.b</h3>
+    <form enctype="application/form-json">
       <label>
-        a.3.b
-        <input name='a.3.b' value="a.3.b">
-      </label>
-      <label>
-        a.2.b
-        <input name='a.2.b' value="a.2.b">
+        a.b
+        <input name='a.b' value="a.b">
       </label>
       <input type='submit' />
     </form>
-    <h3>orderby is element</h3>
-    <form enctype='application/form-json' orderby='element'>
+    <h3>a.NUMBER.b</h3>
+    <form enctype="application/form-json">
       <label>
-        a.3.b
-        <input name='a.3.b' value="a.3.b">
+        a.1.a
+        <input name='a.1.a' value="a.1.a">
       </label>
       <label>
-        a.2.b
-        <input name='a.2.b' value="a.2.b">
+        a.6.a
+        <input name='a.6.a' value="a.6.a">
+      </label>
+      <label>
+        a.6.b
+        <input name='a.6.b' value="a.6.b">
       </label>
       <input type='submit' />
     </form>

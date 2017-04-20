@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Type-Syntax Demo</title>
+    <script src='../src/form-json.js'></script>
+    <style media="screen">
+      textarea {
+        height: 100px;
+        width: 100%;
+      }
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>AJAX data:</h2>
+    <textarea>empty</textarea>
+    <h3>:string</h3>
+    <form enctype="application/form-json">
+      <label>
+        a:string
+        <input name='a:string' value="a:string">
+      </label>
+      <input type='submit' />
+    </form>
+    <h3>:bool</h3>
+    <form enctype="application/form-json">
+      <label>
+        a:bool
+        <input name='a:bool' value="true">
+      </label>
+      <input type='submit' />
+    </form>
+    <h3>:number</h3>
+    <form enctype="application/form-json">
+      <label>
+        a:number
+        <input name='a:number' value="10">
+      </label>
+      <input type='submit' />
+    </form>
+    <h3>:object</h3>
+    <form enctype="application/form-json">
+      <label>
+        a:object
+        <input name='a:object' value='{"key": "value"}'>
+      </label>
+      <input type='submit' />
+    </form>
+    <h3>:timestamp</h3>
+    <form enctype="application/form-json">
+      <label>
+        a:timestamp
+        <input name='a:timestamp' value='2000-01-01'>
+      </label>
+      <input type='submit' />
+    </form>
+    <h3>:custom</h3>
+    <form enctype="application/form-json">
+      <label>
+        a:ISOString
+        <input name='a:ISOString' value='Fri, 31 Mar 2017 07:00:00'>
+      </label>
+      <input type='submit' />
+    </form>
+
+    <script>
+      document.body.addEventListener('submit', function (e) {
+        e.target.beforeStringify = function (d) {
+          document.querySelector('textarea').value = JSON.stringify(d, null, 2);
+        }
+      })
+
+      HTMLFormJSONElement.registerType('ISOString', function (value) {
+        return new Date(value).toISOString();
+      })
+    </script>
+  </body>
+</html>
