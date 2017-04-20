@@ -49,19 +49,49 @@ You can register a custom type parser to FormJSON for your data. Example:
 
 # Form Methods (refer to jQuery.ajax)
 * `beforeSend(xhr)`
-*  `beforeStringify(data)`
+* `beforeStringify(data)`
 * `dataFilter(data)`
 * `onsuccess(data, textStatus, xhr)` OR `success` event which include infomation in `e.detail`
 * `onerror(xhr, textStatus, errorThrown)` OR `error` event which include infomation in `e.detail`
 * `oncomplete(xhr, textStatus)` OR `complete` event which include infomation in `e.detail`
 
-# Form Attributes
+Example, [Try it online](https://zhoukekestar.github.io/form-json/public/methods.html):
+```html
+<form enctype="application/form-json" method="post">
+  <input name='a' value='b' />
+</form>
 
+<script>
+  var form = document.querySelector('form');
+
+  form.beforeSend = function (xhr) {
+    xhr.setRequestHeader('Access-Token', 'ABC');
+  }
+
+  form.beforeStringify = function (data) {
+    data.beforeStringify = true;
+    return data;
+  }
+  /**
+   * POST data:
+   * {
+   *  "a": "b",
+   *  "beforeStringify": true
+   * }
+   */
+  form.onsuccess = function (data) {
+    console.log('response:' + JSON.stringify(data));
+  }
+</script>
+```
+
+# Form Attributes
+* [Try it online!](https://zhoukekestar.github.io/form-json/public/methods.html)
 * `number2array="true|false"`, default: true.
 
   ```html
   // number2array is true
-  <form>
+  <form enctype='application/form-json'>
     <input name='a.2.b' value="a2b">
   </form>
   // output
@@ -74,7 +104,7 @@ You can register a custom type parser to FormJSON for your data. Example:
   }
 
   // number2array is false
-  <form number2array='false'>
+  <form enctype='application/form-json' number2array='false'>
     <input name='a.2.b' value="a2b">
   </form>
   // output
@@ -90,7 +120,7 @@ You can register a custom type parser to FormJSON for your data. Example:
 
   ```html
   // orderby number
-  <form>
+  <form enctype='application/form-json'>
     <input name='a.3.b' value="a3b">
     <input name='a.2.b' value="a2b">
   </form>
@@ -107,7 +137,7 @@ You can register a custom type parser to FormJSON for your data. Example:
   }
 
   // orderby element
-  <form orderby='element'>
+  <form enctype='application/form-json' orderby='element'>
     <input name='a.3.b' value="a3b">
     <input name='a.2.b' value="a2b">
   </form>

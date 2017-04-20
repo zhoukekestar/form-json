@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Demo</title>
+    <script src='../src/form-json.js'></script>
+  </head>
+  <body>
+    <p>number2array is true</p>
+    <form enctype="application/form-json">
+      <input name='a.2.b' value="a2b">
+      <input type='submit' />
+    </form>
+    <p>number2array is false</p>
+    <form enctype="application/form-json" number2array='false'>
+      <input name='a.2.b' value="a2b">
+      <input type='submit' />
+    </form>
+    <p>orderby is number</p>
+    <form enctype='application/form-json'>
+      <input name='a.3.b' value="a3b">
+      <input name='a.2.b' value="a2b">
+      <input type='submit' />
+    </form>
+    <p>orderby is element</p>
+    <form enctype='application/form-json' orderby='element'>
+      <input name='a.3.b' value="a3b">
+      <input name='a.2.b' value="a2b">
+      <input type='submit' />
+    </form>
+  </body>
+</html>
