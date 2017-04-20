@@ -104,7 +104,7 @@
    */
   var deepSet = function (obj, keys, value) {
     var curKey = keys[0];
-    var o = obj[curKey];
+    var o;
 
     if (keys.length === 1) {
       if (curKey === '') {
@@ -119,6 +119,7 @@
       obj[curKey] = keys[1] === '' ? [] : {};
     }
 
+    o = obj[curKey];
     keys.shift();
     deepSet(o, keys, value);
   };

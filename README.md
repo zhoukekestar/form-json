@@ -86,7 +86,7 @@ Example, [Try it online](https://zhoukekestar.github.io/form-json/public/methods
 ```
 
 # Form Attributes
-* [Try it online!](https://zhoukekestar.github.io/form-json/public/methods.html)
+* [Try it online!](https://zhoukekestar.github.io/form-json/public/attributes.html)
 * `number2array="true|false"`, default: true.
 
   ```html
