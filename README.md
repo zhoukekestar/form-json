@@ -47,6 +47,14 @@ You can register a custom type parser to FormJSON for your data. Example:
 </script>
 ```
 
+# Form Methods (refer to jQuery.ajax)
+* `beforeSend(xhr)`
+*  `beforeStringify(data)`
+* `dataFilter(data)`
+* `onsuccess(data, textStatus, xhr)` OR `success` event which include infomation in `e.detail`
+* `onerror(xhr, textStatus, errorThrown)` OR `error` event which include infomation in `e.detail`
+* `oncomplete(xhr, textStatus)` OR `complete` event which include infomation in `e.detail`
+
 # Form Attributes
 
 * `number2array="true|false"`, default: true.
