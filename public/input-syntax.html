@@ -63,6 +63,7 @@
       document.body.addEventListener('submit', function (e) {
         e.target.beforeStringify = function (d) {
           document.querySelector('textarea').value = JSON.stringify(d, null, 2);
+          return d;
         }
       })
     </script>
