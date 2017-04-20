@@ -96,7 +96,7 @@ Example, [Try it online](https://zhoukekestar.github.io/form-json/public/methods
 
 
 # FQA
-* What we don't support ?
+* Q: What we don't support ?
   * Do not support fill null in array.
     ```html
     <input name="a.0" value="0">
@@ -117,3 +117,5 @@ Example, [Try it online](https://zhoukekestar.github.io/form-json/public/methods
       ]
     }
     ```
+  * Do not support too complex syntax. I will keep syntax as simple as possible.
+* Q: Why you write another form-json ? <br> A: I want simple syntax and easy to use module. Of course, it shoule be tiny size.
