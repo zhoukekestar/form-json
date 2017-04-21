@@ -16,21 +16,21 @@ Import `form-json.js`, and set your form enctype to `application/form-json`. Tha
 
 | syntax | input | output |
 | -- | -- | -- |
-| `a` | `<input name="a" value="c" />` | { a: "c" } |
-| `a.` | `<input name="a." value="c" />` | { a: ["c"] } |
-| `a.b` | `<input name="a.b" value="c" />` | { a: { b: "c" } } |
-| `a.NUMBER.b` | `<input name="a.1.a" value="a1a" />` <br> `<input name="a.6.a" value="a6a" />` <br> `<input name="a.6.b" value="a6b" />` | { a: [<br>&nbsp;&nbsp;{a: "a1a"},<br>&nbsp;&nbsp;{a: "a6a", b: "a6b"}<br>]} |
+| `a` | `<input name="a" value="a" />` | {<br>&nbsp;&nbsp;"a": "c"<br>} |
+| `a.` | `<input name="a." value="a." />` | {<br>&nbsp;&nbsp;"a": [<br>&nbsp;&nbsp;&nbsp;&nbsp;"a."<br>&nbsp;&nbsp;]<br>} |
+| `a.b` | `<input name="a.b" value="c" />` | {<br>&nbsp;&nbsp;"a": {<br>&nbsp;&nbsp;&nbsp;&nbsp;"b": "c"<br>&nbsp;&nbsp;}<br>} |
+| `a.NUMBER.b` | `<input name="a.1.a" value="a1a" />` <br> `<input name="a.6.a" value="a6a" />` <br> `<input name="a.6.b" value="a6b" />` | {<br>&nbsp;&nbsp;"a": [<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"b": "a1a"<br>&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"a": "a6a",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"b": "a6b",<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;]<br>} |
 
 # Type Syntax
 [Try it Online!](https://zhoukekestar.github.io/form-json/public/type-syntax.html)
 
 | syntax | input | output |
 | -- | -- | -- |
-| `:string` | `<input name="a" value="b" />` | { a: "b" } |
-| `:bool` OR `:boolean` | `<input name="a:bool" value="true" />` | { a: true } |
-| `:number` | `<input name="a:number" value="10" />` | { a: 10 } |
-| `:object` | `<input name="a:object" value='{"key": "value"}' />` | { a: { key: "value"}} |
-| `:timestamp` | `<input name="a:timestamp" value="2000-01-01" />` | { a: 946684800000 } |
+| `:string` | `<input name="a" value="b" />` | {<br>&nbsp;&nbsp;"a": "b"<br>} |
+| `:bool` | `<input name="a:bool" value="true" />` | {<br>&nbsp;&nbsp;"a": true <br>} |
+| `:number` | `<input name="a:number" value="10" />` | {<br>&nbsp;&nbsp;"a": 10<br>} |
+| `:object` | `<input name="a:object" value='{"key": "value"}' />` | {<br>&nbsp;&nbsp;"a": {<br>&nbsp;&nbsp;&nbsp;&nbsp;"key": "value"<br>&nbsp;&nbsp;}<br>} |
+| `:timestamp` | `<input name="a:timestamp" value="2000-01-01" />` | {<br>&nbsp;&nbsp;"a": 946684800000<br>} |
 
 You can register a custom type parser to FormJSON for your data. Example:
 
@@ -44,6 +44,10 @@ You can register a custom type parser to FormJSON for your data. Example:
   HTMLFormJSONElement.registerType('ISOString', function (value) {
     return new Date(value).toISOString();
   })
+  // output will be:
+  // {
+  //   "a": "2017-03-30T23:00:00.000Z"
+  // }
 </script>
 ```
 
@@ -65,7 +69,7 @@ Example, [Try it online](https://zhoukekestar.github.io/form-json/public/methods
   var form = document.querySelector('form');
 
   form.beforeSend = function (xhr) {
-    xhr.setRequestHeader('Access-Token', 'ABC');
+    xhr.setRequestHeader('X-Requested-With', 'form-json');
   }
 
   form.beforeStringify = function (data) {
@@ -91,8 +95,8 @@ Example, [Try it online](https://zhoukekestar.github.io/form-json/public/methods
 * `orderby="number|element"`, default: `number`. Attention: `number2array` must be `true`, otherwise it doesn't work.
 
 
-# Browser Support
-`form-json.js` is support most browser include `IE10+` as [`XMLHttpRequest`](http://caniuse.com/#feat=xhr2) is required.
+# Browser compatibility
+`form-json.js` is support most modern browsers include `IE 10+, Android 3.0+, iOS 5.1+` as [`XMLHttpRequest`](http://caniuse.com/#feat=xhr2) is required.
 
 
 # FQA
@@ -118,4 +122,4 @@ Example, [Try it online](https://zhoukekestar.github.io/form-json/public/methods
     }
     ```
   * Do not support too complex syntax. I will keep syntax as simple as possible.
-* Q: Why you write another form-json ? <br> A: I want simple syntax and easy to use module. Of course, it shoule be tiny size.
+* Q: Why you write another form-json ? <br> A: I want simple syntax and easy to use module. Of course, it should be tiny size.
