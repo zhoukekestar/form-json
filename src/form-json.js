@@ -20,6 +20,8 @@
     };
   })();
 
+  var empty = function () {};
+  var nativeSubmit = HTMLFormElement.prototype.submit;
   /**
    * Type Parsers
    */
@@ -45,6 +47,7 @@
       return true;
     }
   };
+
 
   /**
    * Serialize form inputs to Array.
@@ -303,6 +306,7 @@
 
 
     // Call beforeStringify if exist
+    global.HTMLFormJSONElement.beforeStringify(requestdata);
     if (form.beforeStringify) requestdata = form.beforeStringify(requestdata);
 
     // Stringify request data.
@@ -331,11 +335,11 @@
     }
 
 
-
     xhr.onreadystatechange = function () {
+      var data;
       if (xhr.readyState === 4) {
         form.isrunning = false;
-        var data = xhr.response;
+        data = xhr.response;
 
         // If browser not support json as responseType
         if (!isAJAXSupportJson || typeof xhr.response === 'string') {
@@ -346,6 +350,8 @@
           }
         }
 
+        // call dataFilter
+        global.HTMLFormJSONElement.dataFilter(data);
         if (form.dataFilter) data = form.dataFilter(data);
 
         // SUCCESS
@@ -379,6 +385,8 @@
     // set isrunning flag to true
     form.isrunning = true;
 
+    // Call beforeSend
+    global.HTMLFormJSONElement.beforeSend(xhr);
     if (form.beforeSend) form.beforeSend(xhr);
 
     if (method === 'GET') {
@@ -403,21 +411,38 @@
     }
   });
 
+  /**
+   * A WARN message if error not handled by application.
+   */
+  document.addEventListener('error', function (e) {
+    if (e.target.getAttribute('enctype') === 'application/form-json') {
+      console.warn('form-json has an error which is not handled. ', e);
+    }
+  });
+
 
   /**
    * Submit hook
    */
-  var _nativeSubmit = HTMLFormElement.prototype.submit;
   HTMLFormElement.prototype.submit = function () {
+    var e;
     if (this.getAttribute('enctype') === 'application/form-json') {
-      var e = new CustomEvent('submit', {bubbles: true});
-      this.dispatchEvent(e);
+      // Use form-json in Webcomponents
+      if (isNotInMainDocumentBody(this)) {
+        submitHandler.call(this);
+      } else {
+        e = new CustomEvent('submit', { bubbles: true });
+        this.dispatchEvent(e);
+      }
     } else {
-      _nativeSubmit.apply(this, arguments);
+      nativeSubmit.apply(this, arguments);
     }
   };
 
   global.HTMLFormJSONElement = global.HTMLFormJSONElement || {};
+  global.HTMLFormJSONElement.beforeSend = empty;
+  global.HTMLFormJSONElement.beforeStringify = empty;
+  global.HTMLFormJSONElement.dataFilter = empty;
   global.HTMLFormJSONElement.registerType = function (type, parser) {
     typeParsers[type] = parser;
   };
