@@ -346,6 +346,8 @@
           }
         }
 
+        if (form.dataFilter) data = form.dataFilter(data);
+
         // SUCCESS
         if (xhr.status >= 200 && xhr.status < 300) {
           // call onsuccess
@@ -414,7 +416,7 @@
       _nativeSubmit.apply(this, arguments);
     }
   };
-  
+
   global.HTMLFormJSONElement = global.HTMLFormJSONElement || {};
   global.HTMLFormJSONElement.registerType = function (type, parser) {
     typeParsers[type] = parser;
