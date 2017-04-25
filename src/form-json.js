@@ -306,7 +306,7 @@
 
 
     // Call beforeStringify if exist
-    global.HTMLFormJSONElement.beforeStringify(requestdata);
+    if (global.HTMLFormJSONElement.beforeStringify) requestdata = global.HTMLFormJSONElement.beforeStringify(requestdata);
     if (form.beforeStringify) requestdata = form.beforeStringify(requestdata);
 
     // Stringify request data.
@@ -351,7 +351,7 @@
         }
 
         // call dataFilter
-        global.HTMLFormJSONElement.dataFilter(data);
+        if (global.HTMLFormJSONElement.dataFilter) data = global.HTMLFormJSONElement.dataFilter(data);
         if (form.dataFilter) data = form.dataFilter(data);
 
         // SUCCESS
@@ -386,7 +386,7 @@
     form.isrunning = true;
 
     // Call beforeSend
-    global.HTMLFormJSONElement.beforeSend(xhr);
+    if (global.HTMLFormJSONElement.beforeSend) global.HTMLFormJSONElement.beforeSend(xhr);
     if (form.beforeSend) form.beforeSend(xhr);
 
     if (method === 'GET') {
@@ -440,9 +440,6 @@
   };
 
   global.HTMLFormJSONElement = global.HTMLFormJSONElement || {};
-  global.HTMLFormJSONElement.beforeSend = empty;
-  global.HTMLFormJSONElement.beforeStringify = empty;
-  global.HTMLFormJSONElement.dataFilter = empty;
   global.HTMLFormJSONElement.registerType = function (type, parser) {
     typeParsers[type] = parser;
   };
