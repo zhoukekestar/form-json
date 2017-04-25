@@ -23,7 +23,8 @@
   "ava": {
     "require": [
       "./test/helpers/setup-browser-env.js"
-    ]
+    ],
+    "verbose": true
   },
   "devDependencies": {
     "ava": "^0.19.1",
