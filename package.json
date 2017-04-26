@@ -20,15 +20,7 @@
     "url": "https://github.com/zhoukekestar/form-json/issues"
   },
   "homepage": "https://github.com/zhoukekestar/form-json#readme",
-  "ava": {
-    "require": [
-      "./test/helpers/setup-browser-env.js"
-    ],
-    "verbose": true
-  },
   "devDependencies": {
-    "ava": "^0.19.1",
-    "browser-env": "^2.0.30",
     "eslint": "^3.15.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-config-airbnb-base": "^11.1.0",

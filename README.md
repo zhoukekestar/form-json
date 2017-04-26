@@ -1,5 +1,5 @@
 # form-json
-A ajax submiter with json for form. This project is based on [modules/formJSON](https://github.com/zhoukekestar/modules/tree/master/src/formJSON).
+A ajax submiter with json for form. This project is based on [modules/formJSON](https://github.com/zhoukekestar/modules/tree/master/src/formJSON). Online [mocha test](https://zhoukekestar.github.io/form-json/test/index.html).
 
 # Quick Start
 Import `form-json.js`, and set your form enctype to `application/form-json`. That's all what you need to do.
@@ -16,7 +16,7 @@ Import `form-json.js`, and set your form enctype to `application/form-json`. Tha
 
 | syntax | input | output |
 | -- | -- | -- |
-| `a` | `<input name="a" value="a" />` | {<br>&nbsp;&nbsp;"a": "c"<br>} |
+| `a` | `<input name="a" value="a" />` | { "a": "c" } |
 | `a.` | `<input name="a." value="a." />` | {<br>&nbsp;&nbsp;"a": [<br>&nbsp;&nbsp;&nbsp;&nbsp;"a."<br>&nbsp;&nbsp;]<br>} |
 | `a.b` | `<input name="a.b" value="c" />` | {<br>&nbsp;&nbsp;"a": {<br>&nbsp;&nbsp;&nbsp;&nbsp;"b": "c"<br>&nbsp;&nbsp;}<br>} |
 | `a.NUMBER.b` | `<input name="a.1.a" value="a1a" />` <br> `<input name="a.6.a" value="a6a" />` <br> `<input name="a.6.b" value="a6b" />` | {<br>&nbsp;&nbsp;"a": [<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"b": "a1a"<br>&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"a": "a6a",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"b": "a6b",<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;]<br>} |
@@ -26,11 +26,11 @@ Import `form-json.js`, and set your form enctype to `application/form-json`. Tha
 
 | syntax | input | output |
 | -- | -- | -- |
-| `:string` | `<input name="a" value="b" />` | {<br>&nbsp;&nbsp;"a": "b"<br>} |
-| `:bool` | `<input name="a:bool" value="true" />` | {<br>&nbsp;&nbsp;"a": true <br>} |
-| `:number` | `<input name="a:number" value="10" />` | {<br>&nbsp;&nbsp;"a": 10<br>} |
+| `:string` | `<input name="a" value="b" />` | { "a": "b" } |
+| `:bool` | `<input name="a:bool" value="true" />` | { "a": true } |
+| `:number` | `<input name="a:number" value="10" />` | { "a": 10 } |
 | `:object` | `<input name="a:object" value='{"key": "value"}' />` | {<br>&nbsp;&nbsp;"a": {<br>&nbsp;&nbsp;&nbsp;&nbsp;"key": "value"<br>&nbsp;&nbsp;}<br>} |
-| `:timestamp` | `<input name="a:timestamp" value="2000-01-01" />` | {<br>&nbsp;&nbsp;"a": 946684800000<br>} |
+| `:timestamp` | `<input name="a:timestamp" value="2000-01-01" />` | { "a": 946684800000 } |
 
 You can register a custom type parser to FormJSON for your data. Example:
 
