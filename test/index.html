@@ -10,11 +10,16 @@
 
     <script src="./createForm.js"></script>
     <script src='../src/form-json.js'></script>
-    <script src='https://cdn.bootcss.com/should.js/11.2.1/should.min.js'></script>
+    <script src='https://cdn.bootcss.com/chai/4.0.0-canary.2/chai.min.js'></script>
     <script src='https://cdn.bootcss.com/mocha/3.2.0/mocha.min.js'></script>
     <script>
       // mocha.timeout = 5000;
-      mocha.setup('bdd');
+      mocha.setup({
+        ui: 'bdd',
+        ignoreLeaks: true,
+        useInlineDiffs: true
+      });
+      // mocha.checkLeaks();
     </script>
     <script src='./type.js'></script>
     <script src='./input.js'></script>
