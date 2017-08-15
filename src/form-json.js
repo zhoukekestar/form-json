@@ -309,6 +309,8 @@
     if (global.HTMLFormJSONElement.beforeStringify) requestdata = global.HTMLFormJSONElement.beforeStringify(requestdata);
     if (form.beforeStringify) requestdata = form.beforeStringify(requestdata);
 
+    if (requestdata === null) return;
+
     // Stringify request data.
     if (method === 'GET') {
       requestdata = stringifyJSONForGET(requestdata);
@@ -402,6 +404,16 @@
    * @param  {[Event]} e submit event
    */
   document.addEventListener('submit', function (e) {
+    var target = e.target;
+    if (target.getAttribute('enctype') === 'application/form-json') {
+      e.preventDefault();
+      e.stopPropagation();
+
+      submitHandler.call(target);
+    }
+  });
+
+  document.addEventListener('form-json-submit', function (e) {
     var target = e.target;
     if (target.getAttribute('enctype') === 'application/form-json') {
       e.preventDefault();
