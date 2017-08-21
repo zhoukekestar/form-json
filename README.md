@@ -94,6 +94,29 @@ Example, [Try it online](https://zhoukekestar.github.io/form-json/public/methods
 * `number2array="true|false"`, default: true.
 * `orderby="number|element"`, default: `number`. Attention: `number2array` must be `true`, otherwise it doesn't work.
 
+# Form-json in Form
+
+Yes, you can have an embed form-json in `form` like this:
+
+```html
+<form id='form1' method='POST' action='https://httpbin.org/post' enctype='application/form-json'>
+  <div id='form2' action='https://httpbin.org/get' enctype='application/form-json'>
+    <input name='embed' value='true'>
+  </div>
+  <input name='key' value='value'>
+</form>
+<button onclick='submit1()'>submit outter form</button>
+<button onclick='submit2()'>submit inner form</button>
+<script>
+  window.submit1 = function () {
+    form1.submit();
+    form1.dispatchEvent(new CustomEvent('submit', { bubbles: true }));
+  }
+  window.submit2 = function () {
+    form2.dispatchEvent(new CustomEvent('form-json-submit', { bubbles: true }));
+  }
+</script>
+```
 
 # Browser compatibility
 `form-json.js` is support most modern browsers include `IE 10+, Android 3.0+, iOS 5.1+` as [`XMLHttpRequest`](http://caniuse.com/#feat=xhr2) is required.

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <script src='../src/form-json.js'></script>
+    <form id='form1' method='POST' action='https://httpbin.org/post' enctype='application/form-json'>
+      <div id='form2' action='https://httpbin.org/get' enctype='application/form-json'>
+        <input name='embed' value='true'>
+      </div>
+      <input name='key' value='value'>
+    </form>
+    <button onclick='submit1()'>submit outter form</button>
+    <button onclick='submit2()'>submit inner form</button>
+    <script>
+      window.submit1 = function () {
+        form1.submit();
+        form1.dispatchEvent(new CustomEvent('submit', { bubbles: true }));
+      }
+      window.submit2 = function () {
+        form2.dispatchEvent(new CustomEvent('form-json-submit', { bubbles: true }));
+      }
+    </script>
+  </body>
+</html>
